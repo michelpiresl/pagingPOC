@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct HeadlinesModel {
+struct News {
     
     var time: Date
     var source: String

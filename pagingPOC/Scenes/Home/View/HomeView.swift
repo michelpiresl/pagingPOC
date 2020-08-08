@@ -8,8 +8,9 @@
 
 import UIKit
 
-class HomeView: UIView {
-
+final class HomeView: View {
+    
+    // MARK: - Delegate
     weak var delegate: HomeViewController? {
         didSet {
             tableView.delegate = delegate
@@ -17,24 +18,18 @@ class HomeView: UIView {
         }
     }
     
-    override init(frame: CGRect = .zero) {
-        super.init(frame: frame)
-        configView()
-        setupConstraints()
+    // MARK: - View configuration
+    override func configureView() {
+        super.configureView()
+        backgroundColor = .white
     }
     
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    private func configView() {
-        clipsToBounds = true
-        backgroundColor = .lightGray
+    override func setSubviews() {
         addSubview(tableView)
     }
     
-    private func setupConstraints() {
-        translatesAutoresizingMaskIntoConstraints = true
+    override func setupConstraints() {
+        super.setupConstraints()
         
         tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.topAnchor.constraint(equalTo: topAnchor).isActive = true
@@ -44,37 +39,19 @@ class HomeView: UIView {
     }
     
     // MARK: - View items
-    
     private lazy var tableView: UITableView = {
         let tableView = UITableView()
         tableView.register(HomeViewTableViewCell.self, forCellReuseIdentifier: HomeViewTableViewCell.identifier)
-        tableView.rowHeight = UITableView.automaticDimension
-        tableView.estimatedRowHeight = 150
+//        tableView.rowHeight = UITableView.automaticDimension
+//        tableView.estimatedRowHeight = 150
         tableView.backgroundColor = .clear
         return tableView
     }()
     
-    private lazy var loading: UIActivityIndicatorView = {
-        let loading = UIActivityIndicatorView(style: .medium)
-        loading.hidesWhenStopped = true
-        return loading
-    }()
-    
-    func reloadData() {
+    // MARK: - Methods
+    func reloadTableView() {
         tableView.reloadData()
+        tableView.rowHeight = (tableView.bounds.height / 3) - 20
     }
-    
-    func showLoading() {
-        addSubview(loading)
-
-        loading.translatesAutoresizingMaskIntoConstraints = false
-        loading.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
-        loading.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
         
-        loading.startAnimating()
-    }
-    
-    func hideLoading() {
-        loading.stopAnimating()
-    }
 }

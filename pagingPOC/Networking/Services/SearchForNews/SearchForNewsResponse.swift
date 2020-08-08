@@ -1,18 +1,18 @@
 //
-//  Headline.swift
+//  SearchForNewsResponse.swift
 //  pagingPOC
 //
-//  Created by Michel Pires Lourenço on 06/08/20.
+//  Created by Michel Pires Lourenço on 07/08/20.
 //  Copyright © 2020 Michel Pires Lourenço. All rights reserved.
 //
 
 import Foundation
 
-struct HeadlinesResponse: Codable {
+struct SearchForNewsResponse: Codable {
     
     var status: String?
     var totalResults: Int?
-    var articles: [Articles?]
+    var articles: [Articles]?
     
 }
 

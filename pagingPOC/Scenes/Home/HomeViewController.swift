@@ -9,97 +9,91 @@
 import UIKit
 
 class HomeViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
-
+    
+    // MARK: - View
     private lazy var homeView: HomeView = {
         let view = HomeView()
         view.delegate = self
         return view
     }()
-        
-    private var headlines: [HeadlinesModel] = []
-    private var numberOfHeadlines: Int?
-    private var page: Int = 1
     
+    // MARK: - Service
+    private let service: SearchForNewsService = SearchForNewsService()
+    
+    // MARK: - Model
+    private var news: [News] = []
+    private var numberOfNews: Int?
+    private var page: Int = 1
+    private var query: String = "swift"
+    
+    // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        config()
-        requestSearchFor()
-//        requestHeadlines()
-
+        initialConfiguration()
+        requestNews()
     }
     
-    private func config() {
+    // MARK: - Methods
+    private func initialConfiguration() {
         view = homeView
         title = "Notícias"
     }
     
-    private func requestSearchFor(_ query: String = "swift", page: Int = 1) {
-        homeView.showLoading()
-        Api.shared.searchFor(query, page: page) { [weak self] (headlines) in
-            guard let self = self else { return }
-            self.numberOfHeadlines = min(headlines.totalResults ?? 0, 100)
-            headlines.articles.forEach { article in
-                if let article = article {
-                    let headline = HeadlinesModel(time: article.publishedAt ?? "",
-                                                  source: article.source?.name ?? "",
-                                                  title: article.title ?? "",
-                                                  description: article.description ?? "")
-                    self.headlines.append(headline)
-                }
-            }
-            self.reloadData()
-            self.homeView.hideLoading()
-        }
-    }
-    
-    private func requestHeadlines(page: Int = 1) {
-        homeView.showLoading()
-        Api.shared.topHeadlines(page: page) { [weak self] (headlines) in
-            guard let self = self else { return }
-            self.numberOfHeadlines = headlines.totalResults
-            headlines.articles.forEach { article in
-                if let article = article {
-                    let headline = HeadlinesModel(time: article.publishedAt ?? "",
-                                                  source: article.source?.name ?? "",
-                                                  title: article.title ?? "",
-                                                  description: article.description ?? "")
-                    self.headlines.append(headline)
-                }
-            }
-            self.reloadData()
-            self.homeView.hideLoading()
-        }
-    }
-    
     private func reloadData() {
-        homeView.reloadData()
+        homeView.reloadTableView()
+    }
+
+    // MARK: - Services
+    private func requestNews() {
+        homeView.showLoading()
+        service.searchFor(query, page: page) { [weak self] (result) in
+            guard let self = self else { return }
+            switch result {
+            case .success(let newsList):
+                self.numberOfNews = newsList.numberOfNews
+                self.news += newsList.news
+                self.reloadData()
+                self.homeView.hideLoading()
+            case .failure(_):
+                if self.news.count == 0 {
+                    self.homeView.hideLoading()
+                    self.showErrorAlert()
+                }
+            }
+        }
+    }
+    
+    // MARK: - Alert for Error
+    private func showErrorAlert() {
+        let alert = UIAlertController(title: "Erro",
+                                      message: "Não foi possível carregar notícias",
+                                      preferredStyle: .alert)
+        let action = UIAlertAction(title: "OK",
+                                   style: .default,
+                                   handler: nil)
+        alert.addAction(action)
+        present(alert, animated: true, completion: nil)
     }
     
     // MARK: - UITableViewDelegate
     
     // MARK: - UITableViewDataSource
-    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return headlines.count
+        return news.count
     }
     
-    private var count = 0
-
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        count += 1
-        print("[\(count)] cellForRowAt called -> Row: [\(indexPath.row+1)] || Headlines: [\(headlines.count)] || TotalItems: [\(numberOfHeadlines ?? 0)]")
-        if indexPath.row == headlines.count - 1 { // Se for a última célula
-            if let total = numberOfHeadlines, total > headlines.count { // Se tem mais notícias para exibir
+        if indexPath.row == news.count - 1 { // Se for a última célula
+            if let total = numberOfNews, total > news.count { // Se tem mais notícias para exibir
                 page += 1
-                requestSearchFor(page: page)
-//                requestHeadlines(page: page)
+                requestNews()
             }
         }
         if let cell = tableView.dequeueReusableCell(withIdentifier: HomeViewTableViewCell.identifier, for: indexPath) as? HomeViewTableViewCell {
-            let headline = headlines[indexPath.row]
-            cell.date = headline.timeString
-            cell.title = headline.title
-            cell.resume = headline.description
+            let news = self.news[indexPath.row]
+            cell.date = news.timeString
+            cell.title = news.title
+            cell.resume = news.description
             return cell
         }
         return UITableViewCell()
