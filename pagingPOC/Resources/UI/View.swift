@@ -29,7 +29,7 @@ import UIKit
 ///}
 class View: UIView, ViewCoding {
     
-    let loadingView: UIActivityIndicatorView = {
+    private lazy var loadingView: UIActivityIndicatorView = {
         let loading = UIActivityIndicatorView(style: .medium)
         loading.hidesWhenStopped = true
         let color = UIColor.black.withAlphaComponent(0.1)

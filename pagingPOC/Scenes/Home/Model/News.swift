@@ -10,32 +10,28 @@ import UIKit
 
 struct News {
     
-    var time: Date
-    var source: String
-    var title: String
-    var description: String
-    var imageUrlString: String?
+    let time: Date
+    let source: String
+    let title: String
+    let description: String
+    let imageUrlString: String?
     var image: UIImage?
-    var urlString: String
-    
-    
+    let urlString: String
+
     var timeString: String {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateStyle = .short
-        dateFormatter.timeStyle = .medium
-        dateFormatter.locale = Locale(identifier: "pt_BR")
-        return dateFormatter.string(from: time)
+        return Date.ptBRFormatter.string(from: time)
     }
     
-    init(time: String, source: String, title: String, description: String, urlString: String, imageUrlString: String?) {
+    weak var service: SearchForNewsService?
+    
+    init(time: Date, source: String, title: String, description: String, urlString: String, imageUrlString: String?, service: SearchForNewsService?) {
         self.source = source
         self.title = title
         self.description = description
         self.urlString = urlString
         self.imageUrlString = imageUrlString
-        
-        let dateFormatter = ISO8601DateFormatter()
-        self.time = dateFormatter.date(from: time) ?? Date()
+        self.time = time
+        self.service = service
     }
     
 }

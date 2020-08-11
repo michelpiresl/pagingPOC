@@ -11,27 +11,15 @@ import UIKit
 final class HomeViewTableViewCell: TableViewCell {
     
     // MARK: - Model
-    var date: String? {
+    var model: News? {
         didSet {
-            dateLabel.text = date
+           didSetModel()
         }
     }
-    var title: String? {
-        didSet {
-            titleLabel.text = title
-        }
-    }
-    var resume: String? {
-        didSet {
-            resumeLabel.text = resume
-        }
-    }
-    var newsImage: UIImage? {
-        didSet {
-            newsImageView.image = newsImage
-            imageViewHeight.constant = newsImage == nil ? 0 : 100
-        }
-    }
+    
+    // Falar com Marcio: Está baixando a imagem toda vez por não enxergar o [News] no ViewController.
+    
+    var service: SearchForNewsService?
     
     private lazy var imageViewHeight: NSLayoutConstraint = newsImageView.heightAnchor.constraint(equalToConstant: 100)
 
@@ -39,6 +27,18 @@ final class HomeViewTableViewCell: TableViewCell {
     override func configureView() {
         super.configureView()
         contentView.backgroundColor = .white
+    }
+    
+    private func didSetModel() {
+        dateLabel.text = model?.timeString
+        titleLabel.text = model?.title
+        resumeLabel.text = model?.description
+        setImage()
+        imageViewHeight.constant = model?.image == nil ? 0 : 100
+    }
+    
+    override func prepareForReuse() {
+        newsImageView.image = nil
     }
     
     override func setSubviews() {
@@ -77,6 +77,26 @@ final class HomeViewTableViewCell: TableViewCell {
         newsImageView.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 8).isActive = true
         newsImageView.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: -8).isActive = true
         imageViewHeight.isActive = true
+    }
+    
+    ///Set an image for cell by checking model for image. If model doesnt have an image, it is requested using imageURL.
+    private func setImage() {
+        if let cellImage = model?.image { // No momento não faz sentido. Nunca haverá imagem.
+            newsImageView.image = cellImage
+        } else {
+            guard let url = URL(string: model?.imageUrlString ?? "") else { return }
+            model?.service?.requestImage(from: url) { [weak self] (resultImage) in
+                print("<<<<<<<<<BAIXOU IMAGEM>>>>>>>>>>>>>")
+                print("->> \(url.absoluteString)")
+                guard let self = self else { return }
+                if let image = resultImage {
+                    DispatchQueue.main.async {
+                        self.model?.image = image   //Comentar com Marcio: Interessante como essa linha tem que estar dentro do main queue devido ao didSet do 'var model'
+                        self.newsImageView.image = image
+                    }
+                }
+            }
+        }
     }
     
     // MARK: - View items

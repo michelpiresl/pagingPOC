@@ -17,12 +17,13 @@ enum SearchForNewsError: Error {
 final class SearchForNewsService {
     
     private let dispatcher = NetworkDispatcher()
+    private let dateFormatter = ISO8601DateFormatter()
     
     func searchFor(_ query: String, page: Int = 1, pageSize: Int = 20, completion: @escaping (Result<NewsList, SearchForNewsError>) -> Void) {
         let request = SearchForNewsRequest(query: query,
                                            page: page,
                                            pageSize: pageSize)
-        dispatcher.execute(request, to: SearchForNewsResponse.self) { (result) in
+        dispatcher.execute(request, to: SearchForNewsResponse.self) { [weak self] (result) in
             switch result {
             case .success(let responseData):
                 if let response = responseData {
@@ -30,12 +31,13 @@ final class SearchForNewsService {
                     var newsList = NewsList(numberOfNews: numberOfNews)
                     if let articles = response.articles {
                         articles.forEach { article in
-                            let news = News(time: article.publishedAt ?? "",
+                            let news = News(time: self?.dateFormatter.date(from: article.publishedAt ?? "") ?? Date(),
                                             source: article.source?.name ?? "",
                                             title: article.title ?? "",
                                             description: article.description ?? "",
                                             urlString: article.url ?? "",
-                                            imageUrlString: article.urlToImage)
+                                            imageUrlString: article.urlToImage,
+                                            service: self)
                             newsList.news.append(news)
                         }
                     }

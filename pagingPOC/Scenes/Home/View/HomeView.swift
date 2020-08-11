@@ -53,9 +53,9 @@ final class HomeView: View {
         tableView.reloadData()
     }
     
-    func setImage(_ image: UIImage, forCellAt indexPath: IndexPath) {
-        guard let cell = tableView.cellForRow(at: indexPath) as? HomeViewTableViewCell else { return }
-        cell.newsImage = image
-    }
+//    func setImage(_ image: UIImage, forCellAt indexPath: IndexPath) {
+//        guard let cell = tableView.cellForRow(at: indexPath) as? HomeViewTableViewCell else { return }
+//        cell.newsImage = image
+//    }
         
 }
