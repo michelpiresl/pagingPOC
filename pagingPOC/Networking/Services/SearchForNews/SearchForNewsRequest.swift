@@ -29,21 +29,25 @@ struct SearchForNewsRequest: HTTPRequest {
     }
     
     var parameters: HTTPRequestParameters? {
-        return .url([
+        return .urlParameters([
             "q" : query,
-            "page" : page
+            "page" : page,
+            "pageSize": pageSize
         ])
     }
     
     let query: String
     let page: String
+    let pageSize: String
     
     init (
         query: String,
-        page: Int = 1
+        page: Int = 1,
+        pageSize: Int = 20
     ) {
         self.query = query
         self.page = String(page)
+        self.pageSize = String(pageSize)
     }
     
 }

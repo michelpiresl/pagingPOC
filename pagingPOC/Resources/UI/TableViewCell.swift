@@ -31,9 +31,7 @@ class TableViewCell: UITableViewCell, ViewCoding, CellIdentifiable {
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        setSubviews()
-        setupConstraints()
-        configureView()
+        setupView()
     }
     
     required init?(coder: NSCoder) {

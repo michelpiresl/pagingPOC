@@ -1,5 +1,5 @@
 //
-//  Dispatcher.swift
+//  NetworkDispatcher.swift
 //  pagingPOC
 //
 //  Created by Michel Pires Lourenço on 07/08/20.
@@ -8,9 +8,21 @@
 
 import Foundation
 
-final class Dispatcher {
+protocol NetworkDispatcherProtocol {
     
-    func execute<T: Codable>(_ request: HTTPRequest, to type: T.Type, completion: @escaping (Result<T?, DispatchError>) -> Void) {
+    ///Execute a data task with a HTTPRequest, returning a decoded object on completion.
+    func execute<T: Codable>(_ request: HTTPRequest, to type: T.Type, completion: @escaping (Result<T?, DispatchError>) -> Void)
+    
+    ///Execute a data task with a URL, returning a Data object.
+    func execute(_ url: URL, completion: @escaping (Result<Data, DispatchError>) -> Void)
+    
+}
+
+final class NetworkDispatcher: NetworkDispatcherProtocol {
+    
+    func execute<T: Codable>(_ request: HTTPRequest,
+                             to type: T.Type,
+                             completion: @escaping (Result<T?, DispatchError>) -> Void) {
         guard let urlRequest = buildRequest(request) else {
             completion(.failure(.buildRequestError))
             return
@@ -54,10 +66,10 @@ final class Dispatcher {
                 #endif
                 if 200...299 ~= response.statusCode {
                     guard let data = data else {
-                        completion(.success(nil)) // Dúvida: Reamente pode haver sucesso sem dados? (Pesquisar)
+                        completion(.success(nil))
                         return
                     }
-                    if let resultData = self.parseJSONData(data, to: type) {
+                    if let resultData: T? = self.parseJSONData(data) {
                         completion(.success(resultData))
                     } else {
                         completion(.failure(.parseError))
@@ -65,6 +77,22 @@ final class Dispatcher {
                 } else {
                     completion(.failure(.networkingError(response.statusCode))) // TODO: Devolver erro contendo o data (como parsear o JSON?)
                 }
+            }
+        }
+        dataTask.resume()
+    }
+    
+    func execute(_ url: URL,
+                 completion: @escaping (Result<Data, DispatchError>) -> Void) {
+        let dataTask = URLSession.shared.dataTask(with: url) { (data, response, error) in
+            if let error = error {
+                completion(.failure(.requestError(error)))
+            } else {
+                guard let _ = response, let data = data else {
+                    completion(.failure(.unknownResponse))
+                    return
+                }
+                completion(.success(data))
             }
         }
         dataTask.resume()
@@ -94,9 +122,9 @@ final class Dispatcher {
     
     private func buildParameters(_ parameters: HTTPRequestParameters, on urlRequest: inout URLRequest) {
         switch parameters {
-        case .url(let urlParameters):
+        case .urlParameters(let urlParameters):
             urlRequest.url = buildURLParameters(urlParameters, for: urlRequest.url)
-        case .body(let bodyParameters):
+        case .bodyParameters(let bodyParameters):
             urlRequest.httpBody = buildBodyParameters(bodyParameters)
         }
     }
@@ -121,10 +149,10 @@ final class Dispatcher {
         }
     }
     
-    private func parseJSONData<T: Codable>(_ data: Data, to type: T.Type) -> T? {
+    private func parseJSONData<T: Codable>(_ data: Data) -> T? {
         let decoder = JSONDecoder()
         do {
-            let decodedData = try decoder.decode(type, from: data)
+            let decodedData = try decoder.decode(T.self, from: data)
             return decodedData
         } catch {
             return nil

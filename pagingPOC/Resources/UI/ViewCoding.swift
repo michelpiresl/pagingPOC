@@ -11,8 +11,19 @@ import UIKit
 ///An UIView suited for View Coding.
 protocol ViewCoding: UIView {
     
+    func setupView()
     func configureView()
     func setSubviews()
     func setupConstraints()
+    
+}
+
+extension ViewCoding {
+    
+    func setupView() {
+        configureView()
+        setSubviews()
+        setupConstraints()
+    }
     
 }

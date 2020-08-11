@@ -8,24 +8,6 @@
 
 import Foundation
 
-enum HTTPRequestMethod: String {
-    
-    case get
-    case post
-    
-    var name: String {
-        return self.rawValue.uppercased()
-    }
-    
-}
-
-enum HTTPRequestParameters {
-    
-    case url([String:String]?)
-    case body([String:Any]?)
-    
-}
-
 ///A request type to be dispatched on a HTTP service.
 protocol HTTPRequest {
     

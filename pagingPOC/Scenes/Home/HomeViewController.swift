@@ -8,7 +8,7 @@
 
 import UIKit
 
-class HomeViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+final class HomeViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
     // MARK: - View
     private lazy var homeView: HomeView = {
@@ -23,8 +23,9 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
     // MARK: - Model
     private var news: [News] = []
     private var numberOfNews: Int?
+    private var pageSize: Int = 10
     private var page: Int = 1
-    private var query: String = "swift"
+    private var query: String = "apple"
     
     // MARK: - Lifecycle
     override func viewDidLoad() {
@@ -46,18 +47,39 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
     // MARK: - Services
     private func requestNews() {
         homeView.showLoading()
-        service.searchFor(query, page: page) { [weak self] (result) in
+        service.searchFor(query, page: page, pageSize: pageSize) { [weak self] (result) in
             guard let self = self else { return }
             switch result {
             case .success(let newsList):
                 self.numberOfNews = newsList.numberOfNews
                 self.news += newsList.news
-                self.reloadData()
-                self.homeView.hideLoading()
-            case .failure(_):
-                if self.news.count == 0 {
+                DispatchQueue.main.async {
+                    self.reloadData()
                     self.homeView.hideLoading()
-                    self.showErrorAlert()
+                }
+            case .failure:
+                if self.news.count == 0 {
+                    DispatchQueue.main.async {
+                        self.homeView.hideLoading()
+                        self.showErrorAlert()
+                    }
+                }
+            }
+        }
+    }
+    
+    private func setImageForCell(at indexPath: IndexPath) {
+        let news = self.news[indexPath.row]
+        if let cellImage = news.image {
+            homeView.setImage(cellImage, forCellAt: indexPath)
+        } else {
+            guard let url = URL(string: news.imageUrlString ?? "") else { return }
+            service.requestImage(from: url) { [weak self] (resultImage) in
+                guard let self = self else { return }
+                if let image = resultImage {
+                    DispatchQueue.main.async {
+                        self.homeView.setImage(image, forCellAt: indexPath)
+                    }
                 }
             }
         }
@@ -76,6 +98,12 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
     }
     
     // MARK: - UITableViewDelegate
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let thisNews = self.news[indexPath.row]
+        if let newsURL = URL(string: thisNews.urlString) {
+            UIApplication.shared.open(newsURL)
+        }
+    }
     
     // MARK: - UITableViewDataSource
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -94,9 +122,15 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
             cell.date = news.timeString
             cell.title = news.title
             cell.resume = news.description
+            setImageForCell(at: indexPath)
             return cell
         }
         return UITableViewCell()
+    }
+    
+    func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        guard let cell = cell as? HomeViewTableViewCell else { return }
+        cell.newsImage = nil
     }
     
 }

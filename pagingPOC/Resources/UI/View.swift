@@ -29,11 +29,17 @@ import UIKit
 ///}
 class View: UIView, ViewCoding {
     
+    let loadingView: UIActivityIndicatorView = {
+        let loading = UIActivityIndicatorView(style: .medium)
+        loading.hidesWhenStopped = true
+        let color = UIColor.black.withAlphaComponent(0.1)
+        loading.backgroundColor = color
+        return loading
+    }()
+    
     override init(frame: CGRect = .zero) {
         super.init(frame: frame)
-        setSubviews()
-        setupConstraints()
-        configureView()
+        setupView()
     }
     
     required init?(coder: NSCoder) {
@@ -51,6 +57,25 @@ class View: UIView, ViewCoding {
     ///Used to setup constraints for each subview.
     func setupConstraints() {
         translatesAutoresizingMaskIntoConstraints = true
+    }
+    
+    ///Display a loading indicator in front of the UIView.
+    ///
+    ///To remove, call: `.hideloading()`
+    func showLoading() {
+        addSubview(loadingView)
+        loadingView.translatesAutoresizingMaskIntoConstraints = false
+        loadingView.topAnchor.constraint(equalTo: topAnchor).isActive = true
+        loadingView.leftAnchor.constraint(equalTo: leftAnchor).isActive = true
+        loadingView.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
+        loadingView.rightAnchor.constraint(equalTo: rightAnchor).isActive = true
+        loadingView.startAnimating()
+    }
+    
+    ///Hides a loading indicator is there is one.
+    func hideLoading() {
+        loadingView.stopAnimating()
+        loadingView.removeFromSuperview()
     }
     
 }

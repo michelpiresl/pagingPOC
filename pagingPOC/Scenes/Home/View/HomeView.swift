@@ -42,8 +42,8 @@ final class HomeView: View {
     private lazy var tableView: UITableView = {
         let tableView = UITableView()
         tableView.register(HomeViewTableViewCell.self, forCellReuseIdentifier: HomeViewTableViewCell.identifier)
-//        tableView.rowHeight = UITableView.automaticDimension
-//        tableView.estimatedRowHeight = 150
+        tableView.rowHeight = 300
+//        tableView.estimatedRowHeight = 250
         tableView.backgroundColor = .clear
         return tableView
     }()
@@ -51,7 +51,11 @@ final class HomeView: View {
     // MARK: - Methods
     func reloadTableView() {
         tableView.reloadData()
-        tableView.rowHeight = (tableView.bounds.height / 3) - 20
+    }
+    
+    func setImage(_ image: UIImage, forCellAt indexPath: IndexPath) {
+        guard let cell = tableView.cellForRow(at: indexPath) as? HomeViewTableViewCell else { return }
+        cell.newsImage = image
     }
         
 }
