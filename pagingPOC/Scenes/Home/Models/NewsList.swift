@@ -11,6 +11,6 @@ import Foundation
 struct NewsList {
     
     var news: [News] = []
-    var numberOfNews: Int
+    let numberOfNews: Int
     
 }

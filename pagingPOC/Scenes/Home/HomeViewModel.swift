@@ -10,7 +10,6 @@ import Foundation
 
 protocol HomePresenter: AnyObject {
     
-    func presentLoading()
     func presentIdle()
     func presentErrorAlert(_ message: String)
     
@@ -19,27 +18,30 @@ protocol HomePresenter: AnyObject {
 final class HomeViewModel {
     
     // MARK: - Service
-    private let service: SearchForNewsService
+    private let service: SearchForNewsServiceProtocol
     weak var presenter: HomePresenter?
     
     // MARK: - Init
-    init(
-        service: SearchForNewsService
-    ) {
+    init(service: SearchForNewsServiceProtocol) {
         self.service = service
     }
     
     // MARK: - Models
     private var news: [News] = []
-    private var numberOfNews: Int?
+    private var numberOfNews: Int = 0
     private var pageSize: Int = 10
     private var page: Int = 1
     private var query: String = "apple"
     
+    private var isSearching: Bool = false
+    
     // MARK: - Exposed Info
-    func getNews(at indexPath: IndexPath) -> News? {
-        guard indexPath.row < news.count else { return nil }
-        return news[indexPath.row]
+    func getNews(at index: Int) -> News {
+        return news[index]
+    }
+    
+    func serviceForCell() -> SearchForNewsServiceProtocol {
+        return service
     }
     
     func newsCount() -> Int {
@@ -47,38 +49,33 @@ final class HomeViewModel {
     }
     
     func newsTotal() -> Int {
-        return numberOfNews ?? 0
+        return numberOfNews
     }
     
     // MARK: - Service Requests
     func requestNews() {
-        presenter?.presentLoading()
+        isSearching = true
         service.searchFor(query, page: page, pageSize: pageSize) { [weak self] (result) in
             guard let self = self else { return }
             switch result {
             case .success(let newsList):
                 self.numberOfNews = newsList.numberOfNews
                 self.news += newsList.news
-                DispatchQueue.main.async {
-                    self.presenter?.presentIdle()
-                }
+                self.presenter?.presentIdle()
             case .failure:
                 if self.news.count == 0 {
-                    DispatchQueue.main.async {
-                        self.presenter?.presentErrorAlert("Não foi possível carregar notícias")
-                    }
+                    self.presenter?.presentErrorAlert("Não foi possível carregar notícias")
                 }
             }
+            self.isSearching = false
         }
     }
     
     // MARK: - Methods
-    func requestMoreNews(at indexPath: IndexPath) {
-        if indexPath.row == news.count - 1 { // Se for a última célula
-            if let total = numberOfNews, total > news.count { // Se tem mais notícias para exibir
-                page += 1
-                requestNews()
-            }
+    func requestMoreNews() {
+        if numberOfNews > news.count, !isSearching { // Se tem mais notícias para exibir
+            page += 1
+            requestNews()
         }
     }
     

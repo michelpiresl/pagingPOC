@@ -10,31 +10,22 @@ import UIKit
 
 final class HomeViewTableViewCell: TableViewCell {
     
-    // MARK: - Model
-    var model: News? {
-        didSet {
-           didSetModel()
-        }
+    // MARK: Model injection
+    func configure(model: News, imageService: SearchForNewsServiceProtocol) {
+        dateLabel.text = model.timeString
+        titleLabel.text = model.title
+        resumeLabel.text = model.description
+        setImage(service: imageService, urlString: model.imageUrlString)
     }
     
-    // Falar com Marcio: Está baixando a imagem toda vez por não enxergar o [News] no ViewController.
+    // MARK: - Properties
     
-    var service: SearchForNewsService?
-    
-    private lazy var imageViewHeight: NSLayoutConstraint = newsImageView.heightAnchor.constraint(equalToConstant: 100)
+    private lazy var imageViewHeight: NSLayoutConstraint = newsImageView.heightAnchor.constraint(equalToConstant: 0)
 
     // MARK: - View configuration
     override func configureView() {
         super.configureView()
         contentView.backgroundColor = .white
-    }
-    
-    private func didSetModel() {
-        dateLabel.text = model?.timeString
-        titleLabel.text = model?.title
-        resumeLabel.text = model?.description
-        setImage()
-        imageViewHeight.constant = model?.image == nil ? 0 : 100
     }
     
     override func prepareForReuse() {
@@ -79,21 +70,16 @@ final class HomeViewTableViewCell: TableViewCell {
         imageViewHeight.isActive = true
     }
     
+    // MARK: - Methods
     ///Set an image for cell by checking model for image. If model doesnt have an image, it is requested using imageURL.
-    private func setImage() {
-        if let cellImage = model?.image { // No momento não faz sentido. Nunca haverá imagem.
-            newsImageView.image = cellImage
-        } else {
-            guard let url = URL(string: model?.imageUrlString ?? "") else { return }
-            model?.service?.requestImage(from: url) { [weak self] (resultImage) in
-                print("<<<<<<<<<BAIXOU IMAGEM>>>>>>>>>>>>>")
-                print("->> \(url.absoluteString)")
-                guard let self = self else { return }
-                if let image = resultImage {
-                    DispatchQueue.main.async {
-                        self.model?.image = image   //Comentar com Marcio: Interessante como essa linha tem que estar dentro do main queue devido ao didSet do 'var model'
-                        self.newsImageView.image = image
-                    }
+    private func setImage(service: SearchForNewsServiceProtocol, urlString: String?) {
+        guard let url = URL(string: urlString ?? "") else { return }
+        service.requestImage(from: url) { [weak self] (resultImage) in
+            guard let self = self else { return }
+            if let image = resultImage {
+                DispatchQueue.main.async {
+                    self.imageViewHeight.constant = 100
+                    self.newsImageView.image = image
                 }
             }
         }

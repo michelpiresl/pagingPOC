@@ -15,23 +15,26 @@ struct News {
     let title: String
     let description: String
     let imageUrlString: String?
-    var image: UIImage?
     let urlString: String
 
     var timeString: String {
         return Date.ptBRFormatter.string(from: time)
     }
-    
-    weak var service: SearchForNewsService?
-    
-    init(time: Date, source: String, title: String, description: String, urlString: String, imageUrlString: String?, service: SearchForNewsService?) {
+        
+    init(
+        time: Date,
+        source: String,
+        title: String,
+        description: String,
+        urlString: String,
+        imageUrlString: String?
+    ) {
         self.source = source
         self.title = title
         self.description = description
         self.urlString = urlString
         self.imageUrlString = imageUrlString
         self.time = time
-        self.service = service
     }
     
 }

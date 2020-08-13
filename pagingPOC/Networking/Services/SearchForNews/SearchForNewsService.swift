@@ -1,4 +1,4 @@
-//
+///Users/michel/Documents/pagingPOC/pagingPOC/Networking/Services/SearchForNews/SearchForNewsService.swift
 //  SearchForNewsService.swift
 //  pagingPOC
 //
@@ -8,18 +8,33 @@
 
 import UIKit
 
+protocol SearchForNewsServiceProtocol: NetworkService {
+    
+    func searchFor(_ query: String, page: Int, pageSize: Int, completion: @escaping (Result<NewsList, SearchForNewsError>) -> Void)
+    func requestImage(from url: URL, completion: @escaping (UIImage?) -> Void)
+}
+
 enum SearchForNewsError: Error {
     
     case networkingError
     
 }
 
-final class SearchForNewsService {
+final class SearchForNewsService: SearchForNewsServiceProtocol {
     
-    private let dispatcher = NetworkDispatcher()
-    private let dateFormatter = ISO8601DateFormatter()
+    let dispatcher: NetworkDispatcherProtocol
+    private let dateFormatter: ISO8601DateFormatter
+    private let imageCache = NSCache<NSString, UIImage>()
     
-    func searchFor(_ query: String, page: Int = 1, pageSize: Int = 20, completion: @escaping (Result<NewsList, SearchForNewsError>) -> Void) {
+    init(dispatcher: NetworkDispatcherProtocol, dateFormatter: ISO8601DateFormatter) {
+        self.dispatcher = dispatcher
+        self.dateFormatter = dateFormatter
+    }
+    
+    func searchFor(_ query: String,
+                   page: Int = 1,
+                   pageSize: Int = 20,
+                   completion: @escaping (Result<NewsList, SearchForNewsError>) -> Void) {
         let request = SearchForNewsRequest(query: query,
                                            page: page,
                                            pageSize: pageSize)
@@ -36,8 +51,7 @@ final class SearchForNewsService {
                                             title: article.title ?? "",
                                             description: article.description ?? "",
                                             urlString: article.url ?? "",
-                                            imageUrlString: article.urlToImage,
-                                            service: self)
+                                            imageUrlString: article.urlToImage)
                             newsList.news.append(news)
                         }
                     }
@@ -52,12 +66,18 @@ final class SearchForNewsService {
     }
     
     func requestImage(from url: URL, completion: @escaping (UIImage?) -> Void) {
-        dispatcher.execute(url) { (result) in
-            switch result {
-            case .success(let data):
-                completion(UIImage(data: data))
-            case .failure:
-                completion(nil)
+        if let image = imageCache.object(forKey: url.absoluteString as NSString) {
+            completion(image)
+        } else {
+            dispatcher.execute(url) { [weak self] (result) in
+                switch result {
+                case .success(let data):
+                    let image = UIImage(data: data)
+                    self?.imageCache.setObject(image ?? UIImage(), forKey: url.absoluteString as NSString)
+                    completion(image)
+                case .failure:
+                    completion(nil)
+                }
             }
         }
     }

@@ -8,10 +8,15 @@
 
 import UIKit
 
-final class HomeBuilder: SceneBuilder {
+final class HomeBuilder: SceneBuilder { //Não deu para usar o protocolo Builder pois cada Builder tá um argumento diferente para seu build()
+
+    private let service: SearchForNewsServiceProtocol
     
-    static func viewController() -> UIViewController {
-        let service = SearchForNewsService()
+    init(service: SearchForNewsServiceProtocol) {
+        self.service = service
+    }
+    
+    func build() -> UIViewController {
         let viewModel = HomeViewModel(service: service)
         let viewController = HomeViewController(viewModel: viewModel)
         return viewController

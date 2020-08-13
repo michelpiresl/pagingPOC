@@ -21,9 +21,7 @@ final class HomeViewController: UIViewController, UITableViewDelegate, UITableVi
     private let viewModel: HomeViewModel
     
     // MARK: - Init
-    init(
-        viewModel: HomeViewModel
-    ) {
+    init(viewModel: HomeViewModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
         viewModel.presenter = self
@@ -37,6 +35,7 @@ final class HomeViewController: UIViewController, UITableViewDelegate, UITableVi
     override func viewDidLoad() {
         super.viewDidLoad()
         configureView()
+        homeView.showLoading()
         viewModel.requestNews()
     }
     
@@ -46,11 +45,9 @@ final class HomeViewController: UIViewController, UITableViewDelegate, UITableVi
         title = "Notícias"
     }
     
-
-    
     // MARK: - UITableViewDelegate
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        guard let news = viewModel.getNews(at: indexPath) else { return }
+        let news = viewModel.getNews(at: indexPath.row)
         if let newsURL = URL(string: news.urlString) {
             UIApplication.shared.open(newsURL)
         }
@@ -62,31 +59,37 @@ final class HomeViewController: UIViewController, UITableViewDelegate, UITableVi
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        viewModel.requestMoreNews(at: indexPath)
-        if let cell = tableView.dequeueReusableCell(withIdentifier: HomeViewTableViewCell.identifier, for: indexPath) as? HomeViewTableViewCell {
-            let news = viewModel.getNews(at: indexPath)
-            cell.model = news
-            return cell
+        let cell = tableView.dequeueReusableCell(withIdentifier: HomeViewTableViewCell.identifier, for: indexPath) as! HomeViewTableViewCell
+        let model = viewModel.getNews(at: indexPath.row)
+        let service = viewModel.serviceForCell()
+        cell.configure(model: model, imageService: service)
+        return cell
+    }
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        let scroll = scrollView.contentSize.height - scrollView.contentOffset.y
+        if scroll <=  2 * scrollView.bounds.height {
+            homeView.showLoading()
+            viewModel.requestMoreNews()
         }
-        return UITableViewCell()
     }
         
 }
 
 extension HomeViewController: HomePresenter {
     
-    func presentLoading() {
-        homeView.showLoading()
-    }
-    
     func presentIdle() {
-        homeView.reloadTableView()
-        homeView.hideLoading()
+        DispatchQueue.main.async {
+            self.homeView.reloadTableView()
+            self.homeView.hideLoading()
+        }
     }
     
     func presentErrorAlert(_ message: String) {
-        homeView.hideLoading()
-        showErrorAlert(message)
+        DispatchQueue.main.async {
+            self.homeView.hideLoading()
+            self.showErrorAlert(message)
+        }
     }
     
 }

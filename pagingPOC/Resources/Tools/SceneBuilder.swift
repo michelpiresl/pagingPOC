@@ -10,6 +10,6 @@ import UIKit
 
 protocol SceneBuilder {
     
-    static func viewController() -> UIViewController
+    func build() -> UIViewController
     
 }

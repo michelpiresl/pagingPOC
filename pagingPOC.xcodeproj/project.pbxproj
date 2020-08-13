@@ -34,6 +34,7 @@
 		D0CA391124DDE2630057F1F0 /* View.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0CA391024DDE2630057F1F0 /* View.swift */; };
 		D0D7708C24DE0E18009B1F46 /* NetworkDispatcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0D7708B24DE0E18009B1F46 /* NetworkDispatcher.swift */; };
 		D0D7708E24DE1232009B1F46 /* HTTPRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0D7708D24DE1232009B1F46 /* HTTPRequest.swift */; };
+		D0D7B6C924E446F3003AABB9 /* NetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0D7B6C824E446F3003AABB9 /* NetworkService.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -66,6 +67,7 @@
 		D0CA391024DDE2630057F1F0 /* View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = View.swift; sourceTree = "<group>"; };
 		D0D7708B24DE0E18009B1F46 /* NetworkDispatcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkDispatcher.swift; sourceTree = "<group>"; };
 		D0D7708D24DE1232009B1F46 /* HTTPRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPRequest.swift; sourceTree = "<group>"; };
+		D0D7B6C824E446F3003AABB9 /* NetworkService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkService.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -105,22 +107,22 @@
 			path = Error;
 			sourceTree = "<group>";
 		};
-		D06650A124DC9513007408C7 /* View */ = {
+		D06650A124DC9513007408C7 /* Views */ = {
 			isa = PBXGroup;
 			children = (
 				D07AFA9824DC471F00968C07 /* HomeView.swift */,
 				D0206D4624DC4F8C0040082A /* HomeViewTableViewCell.swift */,
 			);
-			path = View;
+			path = Views;
 			sourceTree = "<group>";
 		};
-		D06650A624DCA1D3007408C7 /* Model */ = {
+		D06650A624DCA1D3007408C7 /* Models */ = {
 			isa = PBXGroup;
 			children = (
 				D0CA390924DCB22A0057F1F0 /* News.swift */,
 				D04FF00724DE3928003ACA2B /* NewsList.swift */,
 			);
-			path = Model;
+			path = Models;
 			sourceTree = "<group>";
 		};
 		D07AFA9424DC456400968C07 /* Application */ = {
@@ -135,8 +137,8 @@
 		D07AFA9524DC46B600968C07 /* Home */ = {
 			isa = PBXGroup;
 			children = (
-				D06650A124DC9513007408C7 /* View */,
-				D06650A624DCA1D3007408C7 /* Model */,
+				D06650A124DC9513007408C7 /* Views */,
+				D06650A624DCA1D3007408C7 /* Models */,
 				D07AFA9624DC46CF00968C07 /* HomeViewController.swift */,
 				D0B30EBB24E343F6001E5636 /* HomeViewModel.swift */,
 				D0B30EBF24E36061001E5636 /* HomeBuilder.swift */,
@@ -187,6 +189,7 @@
 		D0AA7A0A24DC443800802AC1 /* Scenes */ = {
 			isa = PBXGroup;
 			children = (
+				D0D7B6CA24E5772C003AABB9 /* Intro */,
 				D07AFA9524DC46B600968C07 /* Home */,
 			);
 			path = Scenes;
@@ -238,8 +241,32 @@
 				D0D7708D24DE1232009B1F46 /* HTTPRequest.swift */,
 				D04FF00B24E19267003ACA2B /* HTTPRequestMethod.swift */,
 				D04FF00D24E19285003ACA2B /* HTTPRequestParameters.swift */,
+				D0D7B6C824E446F3003AABB9 /* NetworkService.swift */,
 			);
 			path = Request;
+			sourceTree = "<group>";
+		};
+		D0D7B6CA24E5772C003AABB9 /* Intro */ = {
+			isa = PBXGroup;
+			children = (
+				D0D7B6CC24E57753003AABB9 /* Views */,
+				D0D7B6CB24E57745003AABB9 /* Models */,
+			);
+			path = Intro;
+			sourceTree = "<group>";
+		};
+		D0D7B6CB24E57745003AABB9 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		D0D7B6CC24E57753003AABB9 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Views;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -336,6 +363,7 @@
 				D04A9B2624DE2C03001DF9E7 /* SearchForNewsRequest.swift in Sources */,
 				D07AFA9724DC46CF00968C07 /* HomeViewController.swift in Sources */,
 				D0CA391124DDE2630057F1F0 /* View.swift in Sources */,
+				D0D7B6C924E446F3003AABB9 /* NetworkService.swift in Sources */,
 				D0D7708C24DE0E18009B1F46 /* NetworkDispatcher.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

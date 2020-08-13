@@ -84,14 +84,27 @@ final class NetworkDispatcher: NetworkDispatcherProtocol {
     
     func execute(_ url: URL,
                  completion: @escaping (Result<Data, DispatchError>) -> Void) {
+        #if DEBUG
+        print("[-------------------- SERVICE REQUEST --------------------]")
+        debugPrint("URL: \(url.absoluteString)")
+        #endif
         let dataTask = URLSession.shared.dataTask(with: url) { (data, response, error) in
             if let error = error {
+                #if DEBUG
+                print("[-------------------- ERROR --------------------]")
+                debugPrint(error)
+                #endif
                 completion(.failure(.requestError(error)))
             } else {
                 guard let _ = response, let data = data else {
                     completion(.failure(.unknownResponse))
                     return
                 }
+                #if DEBUG
+                print("[-------------------- SERVICE RESPONSE --------------------]")
+                debugPrint("URL: \(url.absoluteString)")
+                debugPrint("Data: \(data)")
+                #endif
                 completion(.success(data))
             }
         }
