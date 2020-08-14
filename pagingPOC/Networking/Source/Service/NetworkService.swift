@@ -10,6 +10,6 @@ import Foundation
 
 protocol NetworkService {
     
-    var dispatcher: NetworkDispatcherProtocol { get }
+    var dispatcher: NetworkDispatcher { get }
     
 }

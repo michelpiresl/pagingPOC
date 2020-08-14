@@ -10,9 +10,9 @@ import UIKit
 
 final class HomeViewTableViewCell: TableViewCell {
     
-    // MARK: Model injection
-    func configure(model: News, imageService: SearchForNewsServiceProtocol) {
-        dateLabel.text = model.timeString
+    // MARK: - Model injection
+    func configure(model: News, imageService: DownloadImageServiceProtocol) {
+        dateLabel.text = Date.ptBRFormatter.string(from: model.time) // É possivel abstrair o dataFormatter no configure()
         titleLabel.text = model.title
         resumeLabel.text = model.description
         setImage(service: imageService, urlString: model.imageUrlString)
@@ -72,7 +72,7 @@ final class HomeViewTableViewCell: TableViewCell {
     
     // MARK: - Methods
     ///Set an image for cell by checking model for image. If model doesnt have an image, it is requested using imageURL.
-    private func setImage(service: SearchForNewsServiceProtocol, urlString: String?) {
+    private func setImage(service: DownloadImageServiceProtocol, urlString: String?) {
         guard let url = URL(string: urlString ?? "") else { return }
         service.requestImage(from: url) { [weak self] (resultImage) in
             guard let self = self else { return }

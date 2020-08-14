@@ -16,12 +16,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard let windowScene = (scene as? UIWindowScene) else { return }
         window = UIWindow(frame: UIScreen.main.bounds)
         window?.windowScene = windowScene
-        
-        let service = SearchForNewsService(dispatcher: NetworkDispatcher(), dateFormatter: ISO8601DateFormatter())
-        let navController = UINavigationController(rootViewController: HomeBuilder(service: service).build())
-        navController.navigationBar.isTranslucent = false
-        
-        window?.rootViewController = navController
+        window?.rootViewController = AppBuilder().build()
         window?.makeKeyAndVisible()
     }
 

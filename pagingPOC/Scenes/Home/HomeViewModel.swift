@@ -18,12 +18,16 @@ protocol HomePresenter: AnyObject {
 final class HomeViewModel {
     
     // MARK: - Service
-    private let service: SearchForNewsServiceProtocol
+    private let searchService: SearchForNewsServiceProtocol
+    private let downloadImageService: DownloadImageServiceProtocol
+    
+    // MARK: - Presenter
     weak var presenter: HomePresenter?
     
     // MARK: - Init
-    init(service: SearchForNewsServiceProtocol) {
-        self.service = service
+    init(searchService: SearchForNewsServiceProtocol, downloadImageService: DownloadImageServiceProtocol) {
+        self.searchService = searchService
+        self.downloadImageService = downloadImageService
     }
     
     // MARK: - Models
@@ -40,8 +44,8 @@ final class HomeViewModel {
         return news[index]
     }
     
-    func serviceForCell() -> SearchForNewsServiceProtocol {
-        return service
+    func serviceForCell() -> DownloadImageServiceProtocol {
+        return downloadImageService
     }
     
     func newsCount() -> Int {
@@ -55,7 +59,7 @@ final class HomeViewModel {
     // MARK: - Service Requests
     func requestNews() {
         isSearching = true
-        service.searchFor(query, page: page, pageSize: pageSize) { [weak self] (result) in
+        searchService.searchFor(query, page: page, pageSize: pageSize) { [weak self] (result) in
             guard let self = self else { return }
             switch result {
             case .success(let newsList):
@@ -73,29 +77,10 @@ final class HomeViewModel {
     
     // MARK: - Methods
     func requestMoreNews() {
-        if numberOfNews > news.count, !isSearching { // Se tem mais notícias para exibir
+        if numberOfNews > news.count, !isSearching {
             page += 1
             requestNews()
         }
     }
-    
-    //    ///Set an image for cell at given position by checking model for image. If model doesnt have an image, it is requested using imageURL.
-    //    private func setImageForCell(at indexPath: IndexPath) {
-    //        var news = self.news[indexPath.row]
-    //        if let cellImage = news.image {
-    //            homeView.setImage(cellImage, forCellAt: indexPath)
-    //        } else {
-    //            guard let url = URL(string: news.imageUrlString ?? "") else { return }
-    //            service.requestImage(from: url) { [weak self] (resultImage) in
-    //                guard let self = self else { return }
-    //                if let image = resultImage {
-    //                    news.image = image
-    //                    DispatchQueue.main.async {
-    //                        self.homeView.setImage(image, forCellAt: indexPath)
-    //                    }
-    //                }
-    //            }
-    //        }
-    //    }
 
 }

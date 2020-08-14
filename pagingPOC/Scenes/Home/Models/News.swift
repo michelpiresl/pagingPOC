@@ -16,10 +16,6 @@ struct News {
     let description: String
     let imageUrlString: String?
     let urlString: String
-
-    var timeString: String {
-        return Date.ptBRFormatter.string(from: time)
-    }
         
     init(
         time: Date,

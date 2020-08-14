@@ -6,12 +6,12 @@
 //  Copyright © 2020 Michel Pires Lourenço. All rights reserved.
 //
 
-import UIKit
+import Foundation
 
 protocol SearchForNewsServiceProtocol: NetworkService {
     
     func searchFor(_ query: String, page: Int, pageSize: Int, completion: @escaping (Result<NewsList, SearchForNewsError>) -> Void)
-    func requestImage(from url: URL, completion: @escaping (UIImage?) -> Void)
+
 }
 
 enum SearchForNewsError: Error {
@@ -22,11 +22,10 @@ enum SearchForNewsError: Error {
 
 final class SearchForNewsService: SearchForNewsServiceProtocol {
     
-    let dispatcher: NetworkDispatcherProtocol
+    let dispatcher: NetworkDispatcher
     private let dateFormatter: ISO8601DateFormatter
-    private let imageCache = NSCache<NSString, UIImage>()
     
-    init(dispatcher: NetworkDispatcherProtocol, dateFormatter: ISO8601DateFormatter) {
+    init(dispatcher: NetworkDispatcher, dateFormatter: ISO8601DateFormatter) {
         self.dispatcher = dispatcher
         self.dateFormatter = dateFormatter
     }
@@ -61,23 +60,6 @@ final class SearchForNewsService: SearchForNewsServiceProtocol {
                 }
             case .failure:
                 completion(.failure(.networkingError))
-            }
-        }
-    }
-    
-    func requestImage(from url: URL, completion: @escaping (UIImage?) -> Void) {
-        if let image = imageCache.object(forKey: url.absoluteString as NSString) {
-            completion(image)
-        } else {
-            dispatcher.execute(url) { [weak self] (result) in
-                switch result {
-                case .success(let data):
-                    let image = UIImage(data: data)
-                    self?.imageCache.setObject(image ?? UIImage(), forKey: url.absoluteString as NSString)
-                    completion(image)
-                case .failure:
-                    completion(nil)
-                }
             }
         }
     }

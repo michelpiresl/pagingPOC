@@ -11,7 +11,7 @@ import Foundation
 struct SearchForNewsRequest: HTTPRequest {
     
     var baseURL: String {
-        return "http://newsapi.org/v2"
+        return Enviroment.newsApiBaseURL
     }
     
     var path: String {
@@ -24,7 +24,7 @@ struct SearchForNewsRequest: HTTPRequest {
     
     var header: [String : String]? {
         return [
-            "X-Api-Key" : apiKey
+            "X-Api-Key" : Enviroment.newsApiKey
         ]
     }
     

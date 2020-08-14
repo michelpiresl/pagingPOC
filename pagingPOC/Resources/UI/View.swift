@@ -19,7 +19,7 @@ import UIKit
 ///```
 ///```
 ///override func setSubviews() {
-///    super.setSubview()
+///    super.setSubviews()
 ///    // addSubview(view: UIView)
 ///```
 ///```
@@ -43,7 +43,7 @@ class View: UIView, ViewCoding {
     }
     
     required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        fatalError("This object should not be used on xib or storyboard.")
     }
     
     ///Used to define inicial atributtes for View.

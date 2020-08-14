@@ -28,7 +28,7 @@ final class HomeViewController: UIViewController, UITableViewDelegate, UITableVi
     }
     
     required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        fatalError("This object should not be used on xib or storyboard.")
     }
     
     // MARK: - Lifecycle

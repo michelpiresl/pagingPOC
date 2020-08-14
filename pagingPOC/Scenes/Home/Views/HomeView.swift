@@ -25,6 +25,7 @@ final class HomeView: View {
     }
     
     override func setSubviews() {
+        super.setSubviews()
         addSubview(tableView)
     }
     

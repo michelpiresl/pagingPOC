@@ -35,15 +35,18 @@ class TableViewCell: UITableViewCell, ViewCoding, CellIdentifiable {
     }
     
     required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        fatalError("This object should not be used on xib or storyboard.")
     }
     
+    ///Used to define inicial atributtes for View.
     func configureView() {
         clipsToBounds = true
     }
     
+    ///Used to add subviews.
     func setSubviews() {}
     
+    ///Used to setup constraints for each subview.
     func setupConstraints() {
         translatesAutoresizingMaskIntoConstraints = true
     }
