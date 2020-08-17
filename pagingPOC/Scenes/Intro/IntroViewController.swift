@@ -44,10 +44,7 @@ final class IntroViewController: UIViewController, IntroViewDelegate {
     
     // MARK: - View delegate
     func didTapIntroButton() {
-        let dispatcher = Enviroment.networkDispatcher
-        let searchService = SearchForNewsService(dispatcher: dispatcher, dateFormatter: ISO8601DateFormatter())
-        let downloadImageService = DownloadImageService(dispatcher: dispatcher, imageCache: NSCache<NSString, UIImage>())
-        let nextViewController = HomeBuilder(searchService: searchService, downloadImageService: downloadImageService).build()
+        let nextViewController = HomeBuilder().build()
         navigationController?.pushViewController(nextViewController, animated: true)
     }
     

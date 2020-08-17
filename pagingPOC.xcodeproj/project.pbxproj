@@ -26,6 +26,7 @@
 		D062674324E5F298000EEAB8 /* Enviroment.swift in Sources */ = {isa = PBXBuildFile; fileRef = D062674224E5F298000EEAB8 /* Enviroment.swift */; };
 		D062674524E5F69D000EEAB8 /* AppBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = D062674424E5F69D000EEAB8 /* AppBuilder.swift */; };
 		D062674824E6E383000EEAB8 /* DownloadImageService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D062674724E6E383000EEAB8 /* DownloadImageService.swift */; };
+		D062674B24E72C9C000EEAB8 /* Inject.swift in Sources */ = {isa = PBXBuildFile; fileRef = D062674A24E72C9C000EEAB8 /* Inject.swift */; };
 		D07AFA9724DC46CF00968C07 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D07AFA9624DC46CF00968C07 /* HomeViewController.swift */; };
 		D07AFA9924DC471F00968C07 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D07AFA9824DC471F00968C07 /* HomeView.swift */; };
 		D0AA79F624DC42E400802AC1 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0AA79F524DC42E400802AC1 /* AppDelegate.swift */; };
@@ -71,6 +72,7 @@
 		D062674224E5F298000EEAB8 /* Enviroment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Enviroment.swift; sourceTree = "<group>"; };
 		D062674424E5F69D000EEAB8 /* AppBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppBuilder.swift; sourceTree = "<group>"; };
 		D062674724E6E383000EEAB8 /* DownloadImageService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadImageService.swift; sourceTree = "<group>"; };
+		D062674A24E72C9C000EEAB8 /* Inject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Inject.swift; sourceTree = "<group>"; };
 		D07AFA9624DC46CF00968C07 /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
 		D07AFA9824DC471F00968C07 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		D0AA79F224DC42E400802AC1 /* pagingPOC.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = pagingPOC.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -195,6 +197,7 @@
 				D0AA79F724DC42E400802AC1 /* SceneDelegate.swift */,
 				D062674224E5F298000EEAB8 /* Enviroment.swift */,
 				D062674424E5F69D000EEAB8 /* AppBuilder.swift */,
+				D062674A24E72C9C000EEAB8 /* Inject.swift */,
 			);
 			path = Application;
 			sourceTree = "<group>";
@@ -439,6 +442,7 @@
 				D03C244524DE097D00485C64 /* ViewCoding.swift in Sources */,
 				D0B30EC024E36061001E5636 /* HomeBuilder.swift in Sources */,
 				D062674824E6E383000EEAB8 /* DownloadImageService.swift in Sources */,
+				D062674B24E72C9C000EEAB8 /* Inject.swift in Sources */,
 				D0D7708E24DE1232009B1F46 /* HTTPRequest.swift in Sources */,
 				D07AFA9924DC471F00968C07 /* HomeView.swift in Sources */,
 				D062674124E5F1AA000EEAB8 /* DefaultNetworkDispatcher.swift in Sources */,

@@ -18,13 +18,8 @@ protocol DownloadImageServiceProtocol: NetworkService {
 
 class DownloadImageService: DownloadImageServiceProtocol {
     
-    let dispatcher: NetworkDispatcher
-    let imageCache: NSCache<NSString, UIImage>
-
-    init(dispatcher: NetworkDispatcher, imageCache: NSCache<NSString, UIImage>) {
-        self.dispatcher = dispatcher
-        self.imageCache = imageCache
-    }
+    @Inject var dispatcher: NetworkDispatcher
+    @Inject var imageCache: NSCache<NSString, UIImage>
     
     func requestImage(from url: URL, completion: @escaping (UIImage?) -> Void) {
         if let image = imageCache.object(forKey: url.absoluteString as NSString) {

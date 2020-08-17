@@ -10,11 +10,6 @@ import Foundation
 
 final class Enviroment {
     
-    static let networkDispatcher = DefaultNetworkDispatcher(
-        with: DefaultURLRequestBuilder(),
-        for: URLSession.shared
-    )
-    
     static let newsApiBaseURL = "http://newsapi.org/v2"
     static let newsApiKey = apiKey
     

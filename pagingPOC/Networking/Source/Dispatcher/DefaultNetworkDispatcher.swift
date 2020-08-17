@@ -10,13 +10,8 @@ import Foundation
 
 class DefaultNetworkDispatcher: NetworkDispatcher {
     
-    var requestBuilder: URLRequestBuilder
-    let session: URLSession
-    
-    init(with requestBuilder: URLRequestBuilder, for session: URLSession) {
-        self.requestBuilder = requestBuilder
-        self.session = session
-    }
+    @Inject var requestBuilder: URLRequestBuilder
+    @Inject var session: URLSession
     
     func execute<T: Codable>(_ request: HTTPRequest,
                              to type: T.Type,

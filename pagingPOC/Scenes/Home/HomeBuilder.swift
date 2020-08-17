@@ -10,13 +10,8 @@ import UIKit
 
 final class HomeBuilder: SceneBuilder {
     
-    private let searchService: SearchForNewsServiceProtocol
-    private let downloadImageService: DownloadImageServiceProtocol
-    
-    init(searchService: SearchForNewsServiceProtocol, downloadImageService: DownloadImageServiceProtocol) {
-        self.searchService = searchService
-        self.downloadImageService = downloadImageService
-    }
+    @Inject private var searchService: SearchForNewsServiceProtocol
+    @Inject private var downloadImageService: DownloadImageServiceProtocol
     
     func build() -> UIViewController {
         let viewModel = HomeViewModel(searchService: searchService, downloadImageService: downloadImageService)

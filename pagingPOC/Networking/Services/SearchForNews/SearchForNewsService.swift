@@ -10,6 +10,8 @@ import Foundation
 
 protocol SearchForNewsServiceProtocol: NetworkService {
     
+    var dateFormatter: ISO8601DateFormatter { get }
+    
     func searchFor(_ query: String, page: Int, pageSize: Int, completion: @escaping (Result<NewsList, SearchForNewsError>) -> Void)
 
 }
@@ -22,14 +24,9 @@ enum SearchForNewsError: Error {
 
 final class SearchForNewsService: SearchForNewsServiceProtocol {
     
-    let dispatcher: NetworkDispatcher
-    private let dateFormatter: ISO8601DateFormatter
-    
-    init(dispatcher: NetworkDispatcher, dateFormatter: ISO8601DateFormatter) {
-        self.dispatcher = dispatcher
-        self.dateFormatter = dateFormatter
-    }
-    
+    @Inject var dispatcher: NetworkDispatcher
+    @Inject var dateFormatter: ISO8601DateFormatter
+        
     func searchFor(_ query: String,
                    page: Int = 1,
                    pageSize: Int = 20,
