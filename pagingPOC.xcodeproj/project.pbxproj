@@ -49,6 +49,7 @@
 		D0D7B6D524E588B2003AABB9 /* ViewTemplate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0D7B6D424E588B2003AABB9 /* ViewTemplate.swift */; };
 		D0D7B6D724E588BF003AABB9 /* ViewControllerTemplate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0D7B6D624E588BF003AABB9 /* ViewControllerTemplate.swift */; };
 		D0D7B6D924E588CA003AABB9 /* ViewModelTemplate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0D7B6D824E588CA003AABB9 /* ViewModelTemplate.swift */; };
+		D0FE42782523FEA000DFA6AB /* NewSceneViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0FE42772523FEA000DFA6AB /* NewSceneViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -96,6 +97,7 @@
 		D0D7B6D424E588B2003AABB9 /* ViewTemplate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewTemplate.swift; sourceTree = "<group>"; };
 		D0D7B6D624E588BF003AABB9 /* ViewControllerTemplate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewControllerTemplate.swift; sourceTree = "<group>"; };
 		D0D7B6D824E588CA003AABB9 /* ViewModelTemplate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModelTemplate.swift; sourceTree = "<group>"; };
+		D0FE42772523FEA000DFA6AB /* NewSceneViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewSceneViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -191,7 +193,6 @@
 		D07AFA9424DC456400968C07 /* Application */ = {
 			isa = PBXGroup;
 			children = (
-				D0AA79F524DC42E400802AC1 /* AppDelegate.swift */,
 				D0AA79F724DC42E400802AC1 /* SceneDelegate.swift */,
 				D062674224E5F298000EEAB8 /* Enviroment.swift */,
 				D062674424E5F69D000EEAB8 /* AppBuilder.swift */,
@@ -230,8 +231,10 @@
 		D0AA79F424DC42E400802AC1 /* pagingPOC */ = {
 			isa = PBXGroup;
 			children = (
+				D0AA79F524DC42E400802AC1 /* AppDelegate.swift */,
 				D07AFA9424DC456400968C07 /* Application */,
 				D0AA7A0A24DC443800802AC1 /* Scenes */,
+				D04A9B1F24DE2B38001DF9E7 /* Services */,
 				D0AA7A0B24DC444000802AC1 /* Networking */,
 				D0AA7A0924DC43EE00802AC1 /* Resources */,
 				D0AA79FE24DC42EB00802AC1 /* Assets.xcassets */,
@@ -255,6 +258,7 @@
 		D0AA7A0A24DC443800802AC1 /* Scenes */ = {
 			isa = PBXGroup;
 			children = (
+				D0FE42762523FE7B00DFA6AB /* NewScene */,
 				D0D7B6CA24E5772C003AABB9 /* Intro */,
 				D07AFA9524DC46B600968C07 /* Home */,
 			);
@@ -264,7 +268,6 @@
 		D0AA7A0B24DC444000802AC1 /* Networking */ = {
 			isa = PBXGroup;
 			children = (
-				D04A9B1F24DE2B38001DF9E7 /* Services */,
 				D0D7708F24DE1685009B1F46 /* Source */,
 			);
 			path = Networking;
@@ -349,6 +352,14 @@
 				D062673724E592D6000EEAB8 /* BuilderTemplate.swift */,
 			);
 			path = Templates;
+			sourceTree = "<group>";
+		};
+		D0FE42762523FE7B00DFA6AB /* NewScene */ = {
+			isa = PBXGroup;
+			children = (
+				D0FE42772523FEA000DFA6AB /* NewSceneViewController.swift */,
+			);
+			path = NewScene;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -443,6 +454,7 @@
 				D07AFA9924DC471F00968C07 /* HomeView.swift in Sources */,
 				D062674124E5F1AA000EEAB8 /* DefaultNetworkDispatcher.swift in Sources */,
 				D0AA79F824DC42E400802AC1 /* SceneDelegate.swift in Sources */,
+				D0FE42782523FEA000DFA6AB /* NewSceneViewController.swift in Sources */,
 				D062673624E5926F000EEAB8 /* IntroBuilder.swift in Sources */,
 				D0CA390F24DDDFE40057F1F0 /* CellIdentifiable.swift in Sources */,
 				D062673C24E5EBE6000EEAB8 /* URLRequestBuilder.swift in Sources */,
