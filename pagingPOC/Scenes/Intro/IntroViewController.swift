@@ -17,12 +17,8 @@ final class IntroViewController: UIViewController, IntroViewDelegate {
         return view
     }()
     
-    // MARK: - ViewModel
-    private let viewModel: IntroViewModel
-    
     // MARK: - Init
-    init(viewModel: IntroViewModel) {
-        self.viewModel = viewModel
+    init() {
         super.init(nibName: nil, bundle: nil)
     }
     

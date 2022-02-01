@@ -11,8 +11,7 @@ import UIKit
 final class IntroBuilder: SceneBuilder {
     
     func build() -> UIViewController {
-        let viewModel = IntroViewModel()
-        let viewController = IntroViewController(viewModel: viewModel)
+        let viewController = IntroViewController()
         return viewController
     }
     

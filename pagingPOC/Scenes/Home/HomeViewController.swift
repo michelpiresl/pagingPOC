@@ -42,7 +42,7 @@ final class HomeViewController: UIViewController, UITableViewDelegate, UITableVi
     // MARK: - Methods
     private func configureView() {
         view = homeView
-        title = "Notícias"
+        title = "News"
     }
     
     // MARK: - UITableViewDelegate

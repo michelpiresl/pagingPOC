@@ -44,7 +44,6 @@ final class HomeView: View {
         let tableView = UITableView()
         tableView.register(HomeViewTableViewCell.self, forCellReuseIdentifier: HomeViewTableViewCell.identifier)
         tableView.rowHeight = 300
-//        tableView.estimatedRowHeight = 250
         tableView.backgroundColor = .clear
         return tableView
     }()

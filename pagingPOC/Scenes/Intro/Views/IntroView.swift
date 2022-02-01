@@ -41,7 +41,7 @@ final class IntroView: View {
     // MARK: - View items
     private lazy var introButton: UIButton = {
         let button = UIButton()
-        button.setTitle("Notícias", for: .normal)
+        button.setTitle("News", for: .normal)
         button.setTitleColor(.black, for: .normal)
         button.addTarget(delegate, action: #selector(delegate?.didTapIntroButton), for: .touchUpInside)
         return button

@@ -68,7 +68,7 @@ final class HomeViewModel {
                 self.presenter?.presentIdle()
             case .failure:
                 if self.news.count == 0 {
-                    self.presenter?.presentErrorAlert("Não foi possível carregar notícias")
+                    self.presenter?.presentErrorAlert("Unable to load news")
                 }
             }
             self.isSearching = false
